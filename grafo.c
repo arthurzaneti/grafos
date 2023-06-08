@@ -8,7 +8,7 @@ grafo* grafo_cria(lista* nos, lista* arestas){
         nova_lista->elemento_de_partida = no_atual->data;
         no* aresta_atual = arestas->primeiro;
         for (int itera_arestas=0; itera_arestas<arestas->num_elementos; itera_arestas++){
-            if (*(int*)(no_atual->data) == (*(aresta*)(aresta_atual->data))->inicio){ 
+            if (*(int*)(no_atual->data) == *((int*)((aresta*)(aresta_atual->data))->inicio)){ 
             }
         }
     }
