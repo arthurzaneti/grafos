@@ -171,7 +171,7 @@ void lista_testa(){
     lista* c = lista_cria();
     void *ptrc = c;
     no *no_lista =no_cria(ptrc);
-    lista_insere(l, no_lista, l->num_elementos);
+    lista_insere(l, no_lista, -1);
 
     assert(l->num_elementos ==3);
     assert(no_int== l->primeiro);

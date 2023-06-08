@@ -4,6 +4,9 @@
         "stdlib.h": "c",
         "aresta.h": "c",
         "stdbool.h": "c",
-        "lista.h": "c"
+        "lista.h": "c",
+        "stdio.h": "c",
+        "assert.h": "c",
+        "grafo.h": "c"
     }
 }

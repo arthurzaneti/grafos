@@ -7,5 +7,7 @@ typedef struct _aresta{
     tipo_no fim;
 }aresta;
 aresta *aresta_cria(tipo_no inicio, tipo_no fim);
+void aresta_destroi(aresta* a);
+void aresta_testa();
 
 #endif
