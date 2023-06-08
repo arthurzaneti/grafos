@@ -1,8 +1,7 @@
 #ifndef _ARESTA_H_
 #define _ARESTA_H_
 
-#include "fila_de_adjacencia.h"
-
+typedef char tipo_no; 
 typedef struct _aresta{
     tipo_no inicio;
     tipo_no fim;
