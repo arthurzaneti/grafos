@@ -1,6 +1,6 @@
 #ifndef _LISTA_H_
 #define _LISTA_H_
-#include aresta.h
+#include "aresta.h"
 
 #include <stdbool.h>
 typedef struct no no;
@@ -18,15 +18,17 @@ typedef struct no{
 }no;
 
 lista* lista_cria();
-void lista_insere_inicio(lista* l, no* elem);
-void lista_insere_fim(lista*l, no* elem);
-void lista_insere_vazia(lista*l, no* elem);
+no* no_cria(void*data);
+void lista_insere_inicio_aux(lista* l, no* elem);
+void lista_insere_fim_aux(lista*l, no* elem);
+void lista_insere_vazia_aux(lista*l, no* elem);
 void lista_insere(lista*l, no* elem, int pos);
 
-void* lista_remove_inicio(lista*l);
-void* lista_remove_fim(lista*l);
+void* lista_remove_inicio_aux(lista*l);
+void* lista_remove_fim_aux(lista*l);
 void* lista_remove(lista *l, int pos);
-bool verifica_remoção(lista*l, int pos);
+void lista_destroi(lista *l);
+bool verifica_remoção_aux(lista*l, int pos);
 void lista_testa();
 
 #endif
