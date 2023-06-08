@@ -1,0 +1,17 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+
+all: fila_de_adjacencia
+
+fila: fila.c fila.h
+	$(CC) $(CFLAGS) -c fila.c
+
+aresta: aresta.c aresta.h
+	$(CC) $(CFLAGS) -c aresta.c
+
+fila_de_adjacencia: fila_de_adjacencia.c fila.h aresta.h
+	$(CC) $(CFLAGS) -c fila_de_adjacencia.c
+	$(CC) $(CFLAGS) fila.o aresta.o fila_de_adjacencia.o -o fila_de_adjacencia
+
+clean:
+	rm -f *.o fila_de_adjacencia
