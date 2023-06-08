@@ -1,17 +1,22 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -pedantic
 
-all: fila_de_adjacencia
+all: programa
 
-fila: fila.c fila.h
-	$(CC) $(CFLAGS) -c fila.c
+programa: lista.o grafo.o aresta.o main.o
+	$(CC) $(CFLAGS) -o programa lista.o grafo.o aresta.o main.o
 
-aresta: aresta.c aresta.h
+lista.o: lista.c lista.h
+	$(CC) $(CFLAGS) -c lista.c
+
+grafo.o: grafo.c grafo.h lista.h
+	$(CC) $(CFLAGS) -c grafo.c
+
+aresta.o: aresta.c aresta.h
 	$(CC) $(CFLAGS) -c aresta.c
 
-fila_de_adjacencia: fila_de_adjacencia.c fila.h aresta.h
-	$(CC) $(CFLAGS) -c fila_de_adjacencia.c
-	$(CC) $(CFLAGS) fila.o aresta.o fila_de_adjacencia.o -o fila_de_adjacencia
+main.o: main.c lista.h grafo.h aresta.h
+	$(CC) $(CFLAGS) -c main.c
 
 clean:
-	rm -f *.o fila_de_adjacencia
+	del -f programa *.o

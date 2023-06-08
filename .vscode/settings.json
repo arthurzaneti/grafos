@@ -2,7 +2,8 @@
     "files.associations": {
         "fila.h": "c",
         "stdlib.h": "c",
-        "fila_de_adjacencia.h": "c",
-        "aresta.h": "c"
+        "aresta.h": "c",
+        "stdbool.h": "c",
+        "lista.h": "c"
     }
 }

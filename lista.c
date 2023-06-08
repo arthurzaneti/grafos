@@ -2,41 +2,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
 lista* lista_cria(){
-    lista* l = malloc(sizeof(struct lista));
+    lista* l = malloc(sizeof(lista));
     if (l==NULL){
-        printf("Erro de alocação: falha no malloc");
+        printf("Erro de alocação da lista: falha no malloc");
         return NULL;
     };
     l->primeiro = NULL;
     l->ultimo = NULL;
     l->num_elementos = 0;
     return (l);
-};
-void insere_inicio(lista* l, no* elem){
-    if(l->primeiro ==NULL) insere_lista_vazia(l, elem);
+}
+no* no_cria(void*data){
+    no* n = malloc(sizeof(no));
+    if (n==NULL){
+        printf("Erro de alocação do no: falha no malloc");
+        return NULL;
+    }
+    n->data = data;
+    return n;
+}
+void lista_insere_inicio(lista* l, no* elem){
+    if(l->primeiro ==NULL) lista_insere_vazia(l, elem);
     else{
         elem->ant = NULL;
         elem->prox= l->primeiro;
+        elem->prox->ant = elem;
         l->primeiro = elem;
     }
-};
-void insere_fim(lista*l, no* elem){
-    if(l->primeiro ==NULL) insere_lista_vazia(l, elem);
+}
+void lista_insere_fim(lista*l, no* elem){
+    if(l->primeiro ==NULL) lista_insere_vazia(l, elem);
     else{
+
         elem->ant = l->ultimo;
         elem->prox= NULL;
+        elem->ant->prox = elem;
         l->ultimo = elem;
     }
 }
-void insere_lista_vazia(lista*l, no* elem){
+void lista_insere_vazia(lista*l, no* elem){
     l->ultimo = elem;
     l->primeiro = elem;
     elem->prox = NULL;
     elem->ant =NULL;
 }
-void insere(lista*l, no* elem, int pos){
+void lista_insere(lista*l, no* elem, int pos){
     if (l==NULL){
         printf("Erro de inserção: Lista nula");
         return;
@@ -53,8 +66,8 @@ void insere(lista*l, no* elem, int pos){
         return;
     }
     else{
-        if (pos==0) insere_inicio(l, elem);
-        else if (pos==l->num_elementos) insere_fim(l, elem);
+        if (pos==0) lista_insere_inicio(l, elem);
+        else if (pos==l->num_elementos) lista_insere_fim(l, elem);
         else{
             no *no_atual = l->primeiro;
             int contador = 0;
@@ -77,6 +90,7 @@ void* lista_remove_inicio(lista*l){
     l->primeiro = no_remover->prox;
     void* valor_do_no = no_remover->data;
     free(no_remover);
+    l->num_elementos--;
     return (valor_do_no);
 }
 void* lista_remove_fim(lista*l){
@@ -85,11 +99,12 @@ void* lista_remove_fim(lista*l){
     l->ultimo = no_remover->ant;
     void* valor_do_no = no_remover->data;
     free(no_remover);
+    l->num_elementos--;
     return (valor_do_no);
 }
 
 void* lista_remove(lista *l, int pos){
-    if(!verifica_remoção(l,pos)) return;
+    if(!verifica_remoção(l,pos)) return NULL;
     if (pos <0) pos += l->num_elementos;
     if (pos==0)return lista_remove_inicio(l);
     if (pos==l->num_elementos) return lista_remove_fim(l);
@@ -102,7 +117,8 @@ void* lista_remove(lista *l, int pos){
     no_atual->ant->prox = no_atual->prox;
     no_atual->prox->ant = no_atual->ant;
     void* valor_do_no = no_atual->data;
-    free(no_atual);   
+    free(no_atual);
+    l->num_elementos--;   
     return (valor_do_no);
 }
 bool verifica_remoção(lista*l, int pos){
@@ -137,4 +153,32 @@ void lista_destroi(lista*l){
         no_atual = prox_do_atual;
     }
     free(l);
+}
+void lista_testa(){
+
+    lista* l = lista_cria();
+
+    int a = 10;
+    void *ptra = &a;
+    no *no_int =no_cria(ptra);
+    lista_insere(l, no_int,0);
+    
+    char b = 'b';
+    void *ptrb = &b;
+    no *no_char =no_cria(ptrb);
+    lista_insere(l, no_char,l->num_elementos);
+    
+    lista* c = lista_cria();
+    void *ptrc = c;
+    no *no_lista =no_cria(ptrc);
+    lista_insere(l, no_lista, l->num_elementos);
+
+    assert(l->num_elementos ==3);
+    assert(no_int== l->primeiro);
+    assert(no_lista==l->ultimo);
+
+    lista_remove(l, 0);
+    assert(l->primeiro == no_char);
+    assert(l->num_elementos==2);
+    lista_destroi(l);
 }

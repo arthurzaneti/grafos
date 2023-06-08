@@ -6,6 +6,6 @@ typedef struct _aresta{
     tipo_no inicio;
     tipo_no fim;
 }aresta;
-aresta aresta_cria(tipo_no inicio, tipo_no fim);
+aresta *aresta_cria(tipo_no inicio, tipo_no fim);
 
 #endif
