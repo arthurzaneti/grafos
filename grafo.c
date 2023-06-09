@@ -1,6 +1,7 @@
 #include "grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 grafo* grafo_cria(lista* nos, lista* arestas){
     lista* lista_de_adjacencias = lista_cria();
@@ -23,36 +24,40 @@ grafo* grafo_cria(lista* nos, lista* arestas){
     novo_grafo->lista_de_adjacencias=lista_de_adjacencias;
     return novo_grafo;
 }
-lista* grafo_itera_arestas_aux(no* no_atual, lista* arestas){
+lista* grafo_itera_arestas_aux(no* no_atual, lista* arestas) {
     lista* nova_lista = lista_cria();
-    if (nova_lista ==NULL){
+    if (nova_lista == NULL) {
         printf("Erro de alocação da lista de arestas: falha no malloc");
         return NULL;
     }
     nova_lista->elemento_de_partida = *(tipo_no*)no_atual->data;
     no* no_que_contem_aresta_atual = arestas->primeiro;
-    while(no_que_contem_aresta_atual!=NULL){
-        aresta* aresta_aresta = (aresta*)no_que_contem_aresta_atual->data;
-        tipo_no inicio_aresta_atual = aresta_aresta->inicio;
-        if (*(tipo_no*)no_atual->data == inicio_aresta_atual){ 
-            lista_insere(nova_lista, no_que_contem_aresta_atual,-1);
+    while (no_que_contem_aresta_atual != NULL) {
+        aresta* aresta_atual = (aresta*)no_que_contem_aresta_atual->data;
+        tipo_no inicio_aresta_atual = aresta_atual->inicio;
+        if (*(tipo_no*)no_atual->data == inicio_aresta_atual) {
+            lista_insere(nova_lista, no_cria((void*)aresta_atual), -1);
         }
         no_que_contem_aresta_atual = no_que_contem_aresta_atual->prox;
     }
-    return nova_lista; 
+
+    return nova_lista;
 }
-void grafo_printa(grafo* g){
+void grafo_printa(grafo* g) {
     lista* lista_de_adjacencias = g->lista_de_adjacencias;
-    no* lista_atual = (lista_de_adjacencias->primeiro); 
-    while (lista_atual!=NULL){
-        no* aresta_atual = ((lista*)(lista_atual->data))->primeiro;
-        while(aresta_atual!=NULL){
-            printf("%c -> %c \n", ((aresta*)(aresta_atual->data))->inicio, ((aresta*)(aresta_atual->data))->fim);
-            aresta_atual=aresta_atual->prox;
+    no* no_lista_atual = lista_de_adjacencias->primeiro; 
+    while (no_lista_atual != NULL) {
+        no* no_aresta_atual = ((lista*)no_lista_atual->data)->primeiro;
+        while (no_aresta_atual != NULL) {
+            aresta* aresta_atual = (aresta*)no_aresta_atual->data;
+            printf("%c -> %c \n", aresta_atual->inicio, aresta_atual->fim);
+            no_aresta_atual = no_aresta_atual->prox;
         }
-        lista_atual= lista_atual->prox;
+        no_lista_atual = no_lista_atual->prox;
     }
 }
+
+
 void grafo_destroi(grafo* g) {
     no* no_lista_atual = g->lista_de_adjacencias->primeiro;
     while (no_lista_atual != NULL) {
@@ -77,35 +82,44 @@ void grafo_testa() {
     lista* nos = lista_cria();
     lista* arestas = lista_cria();
 
-    const char* dataA = "a";
-    const char* dataB = "b";
-    const char* dataC = "c";
-    const char* dataD = "d";
+    const char* a = "a";
+    const char* b = "b";
+    const char* c = "c";
+    const char* d = "d";
 
-    no* nodeA = no_cria((void*)dataA);
-    no* nodeB = no_cria((void*)dataB);
-    no* nodeC = no_cria((void*)dataC);
-    no* nodeD = no_cria((void*)dataD);
+    no* no_a = no_cria((void*)a);
+    no* no_b = no_cria((void*)b);
+    no* no_c = no_cria((void*)c);
+    no* no_d = no_cria((void*)d);
 
-    lista_insere(nos, nodeA, -1);
-    lista_insere(nos, nodeB, -1);
-    lista_insere(nos, nodeC, -1);
-    lista_insere(nos, nodeD, -1);
+    lista_insere(nos, no_a, -1);
+    lista_insere(nos, no_b, -1);
+    lista_insere(nos, no_c, -1);
+    lista_insere(nos, no_d, -1);
 
-    aresta* edgeAB = aresta_cria((tipo_no)dataA, (tipo_no)dataB);
-    aresta* edgeAC = aresta_cria((tipo_no)dataA, (tipo_no)dataC);
-    aresta* edgeBD = aresta_cria((tipo_no)dataB, (tipo_no)dataD);
-    aresta* edgeCD = aresta_cria((tipo_no)dataC, (tipo_no)dataD);
+    aresta* aresta_AB = aresta_cria(*(tipo_no*)a, *(tipo_no*)b);
+    aresta* aresta_AC = aresta_cria(*(tipo_no*)a, *(tipo_no*)c);
+    aresta* aresta_BD = aresta_cria(*(tipo_no*)b, *(tipo_no*)d);
+    aresta* aresta_CD = aresta_cria(*(tipo_no*)c, *(tipo_no*)d);
+    aresta* aresta_DA = aresta_cria(*(tipo_no*)d, *(tipo_no*)a);
+    aresta* aresta_BA = aresta_cria(*(tipo_no*)b, *(tipo_no*)a);
+    aresta* aresta_DD= aresta_cria(*(tipo_no*)d, *(tipo_no*)d);
+    aresta* aresta_BC= aresta_cria(*(tipo_no*)b, *(tipo_no*)c);
 
-    lista_insere(arestas, no_cria((void*)edgeAB), -1);
-    lista_insere(arestas, no_cria((void*)edgeAC), -1);
-    lista_insere(arestas, no_cria((void*)edgeBD), -1);
-    lista_insere(arestas, no_cria((void*)edgeCD), -1);
+    lista_insere(arestas, no_cria((void*)aresta_AB), -1);
+    lista_insere(arestas, no_cria((void*)aresta_AC), -1);
+    lista_insere(arestas, no_cria((void*)aresta_BD), -1);
+    lista_insere(arestas, no_cria((void*)aresta_CD), -1);
+    lista_insere(arestas, no_cria((void*)aresta_DA), -1);
+    lista_insere(arestas, no_cria((void*)aresta_BA), -1);
+    lista_insere(arestas, no_cria((void*)aresta_DD), -1);
+    lista_insere(arestas, no_cria((void*)aresta_BC), -1);
 
     grafo* g = grafo_cria(nos, arestas);
     grafo_printa(g);
+    
 
-    lista_destroi(nos);  // Free the node list and its nodes
-    lista_destroi(arestas);  // Free the edge list and its edges
-    grafo_destroi(g);  // Free the graph and its lists
+    lista_destroi(nos);  
+    lista_destroi(arestas);  
+    grafo_destroi(g);  
 }
