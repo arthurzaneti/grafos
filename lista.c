@@ -15,6 +15,7 @@ lista* lista_cria(){
     l->num_elementos = 0;
     return (l);
 }
+
 no* no_cria(void*data){
     no* n = malloc(sizeof(no));
     if (n==NULL){
@@ -24,6 +25,7 @@ no* no_cria(void*data){
     n->data = data;
     return n;
 }
+
 void lista_insere_inicio_aux(lista* l, no* elem){
     if(l->primeiro ==NULL) lista_insere_vazia_aux(l, elem);
     else{
@@ -33,6 +35,7 @@ void lista_insere_inicio_aux(lista* l, no* elem){
         l->primeiro = elem;
     }
 }
+
 void lista_insere_fim_aux(lista*l, no* elem){
     if(l->primeiro ==NULL) lista_insere_vazia_aux(l, elem);
     else{
@@ -43,12 +46,14 @@ void lista_insere_fim_aux(lista*l, no* elem){
         l->ultimo = elem;
     }
 }
+
 void lista_insere_vazia_aux(lista*l, no* elem){
     l->ultimo = elem;
     l->primeiro = elem;
     elem->prox = NULL;
     elem->ant =NULL;
 }
+
 void lista_insere(lista*l, no* elem, int pos){
     if (l==NULL){
         printf("Erro de inserção: Lista nula");
@@ -84,6 +89,7 @@ void lista_insere(lista*l, no* elem, int pos){
     }
     l->num_elementos++;
 }
+
 void* lista_remove_inicio_aux(lista*l){
     no* no_remover = l->primeiro;
     no_remover->prox->ant = NULL;
@@ -93,6 +99,7 @@ void* lista_remove_inicio_aux(lista*l){
     l->num_elementos--;
     return (valor_do_no);
 }
+
 void* lista_remove_fim_aux(lista*l){
     no* no_remover = l->ultimo;
     no_remover->ant->prox = NULL;
@@ -121,6 +128,7 @@ void* lista_remove(lista *l, int pos){
     l->num_elementos--;   
     return (valor_do_no);
 }
+
 bool verifica_remoção_aux(lista*l, int pos){
     if(l==NULL){
         printf("Erro de remoção: Lista nula");
@@ -141,6 +149,7 @@ bool verifica_remoção_aux(lista*l, int pos){
     }
     return true;
 }
+
 void lista_destroi(lista*l){
     if(l->primeiro==NULL) {
         free(l);
@@ -154,6 +163,7 @@ void lista_destroi(lista*l){
     }
     free(l);
 }
+
 void lista_testa(){
 
     lista* l = lista_cria();
