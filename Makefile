@@ -19,4 +19,4 @@ main.o: main.c lista.h grafo.h aresta.h
 	$(CC) $(CFLAGS) -c main.c
 
 clean:
-	del -f programa *.o
+	rm -f programa *.o

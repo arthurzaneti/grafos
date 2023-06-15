@@ -6,7 +6,7 @@
 #define NULL_CHAR '\0'
 // se tipo_no mudar talvez precise definir outro valor para comparar com NULL
 
-aresta *aresta_cria(tipo_no inicio, tipo_no fim){
+aresta *aresta_cria(tipo_no inicio, tipo_no fim, float peso){
     if (inicio == NULL_CHAR || fim ==NULL_CHAR){
         printf("Erro na criação da aresta: inicio ou fim nulos");
         return NULL;
@@ -18,6 +18,7 @@ aresta *aresta_cria(tipo_no inicio, tipo_no fim){
     }
     a->inicio = inicio;
     a->fim = fim;
+    a->peso = peso;
     return a;
 }
 void aresta_destroi(aresta* a){
@@ -29,10 +30,11 @@ void aresta_destroi(aresta* a){
     return;
 }
 void aresta_testa(){
-    tipo_no c = 'c';
-    tipo_no a = 'a';
-    aresta* aresta_teste = aresta_cria(c,a);
-    assert(aresta_teste->inicio =='c');
-    assert(aresta_teste->fim =='a');
+    int c = 1;
+    int  a = 1;
+    float peso = 10;
+    aresta* aresta_teste = aresta_cria(c, a, peso);
+    assert(aresta_teste->inicio ==1);
+    assert(aresta_teste->fim ==1);
     aresta_destroi(aresta_teste);
 }
