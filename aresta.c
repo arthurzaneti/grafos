@@ -3,12 +3,10 @@
 # include <stdlib.h>
 # include <assert.h>
 
-#define NULL_CHAR '\0'
-// se tipo_no mudar talvez precise definir outro valor para comparar com NULL
 
-aresta *aresta_cria(tipo_no inicio, tipo_no fim, float peso){
-    if (inicio == NULL_CHAR || fim ==NULL_CHAR){
-        printf("Erro na criação da aresta: inicio ou fim nulos");
+aresta *aresta_cria(int inicio, int fim, float peso){
+    if (inicio <0|| fim <0){
+        printf("Erro na criação da aresta: inicio ou fim menores que 0");
         return NULL;
     }
     aresta* a = malloc(sizeof(aresta));

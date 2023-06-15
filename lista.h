@@ -8,7 +8,7 @@ typedef struct lista{
     no* primeiro;
     no* ultimo;
     int num_elementos;
-    tipo_no elemento_de_partida;
+    int elemento_de_partida;
 }lista;
 
 typedef struct no{
