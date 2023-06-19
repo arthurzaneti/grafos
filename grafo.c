@@ -289,34 +289,3 @@ void grafo_testa() {
     g_rem_aresta(g, 3, 4);
     g_destroi(g);
 }
-void grafo_testa2(){
-    grafo * g = g_cria(0, false);
-    assert(g->orientado == false);
-    g_ins_aresta(g, 5, 1, 10.4);
-    g_ins_aresta(g, 5, 2, 10.6);
-    assert(g->lista_de_adjacencias->num_elementos == 3);
-    assert(g->lista_de_adjacencias != NULL);
-
-    lista* lista_de_adjacencias = g->lista_de_adjacencias;
-    no* primeiro_no = lista_de_adjacencias->primeiro;
-    lista* primeira_lista = (lista*)primeiro_no->data;
-    no* primeiro_no_da_primeira_lista = primeira_lista->primeiro;
-    aresta* primeira_aresta_da_primeira_lista = (aresta*)primeiro_no_da_primeira_lista->data;
-    
-    assert(g != NULL);
-    assert(lista_de_adjacencias !=NULL);
-    assert(primeiro_no !=NULL);
-    assert(primeira_lista !=NULL);
-    assert(primeiro_no_da_primeira_lista !=NULL);
-    assert(primeira_aresta_da_primeira_lista !=NULL);
-
-    g_arestas(g);
-    int origem, destino;
-    float(peso);
-
-
-    printf("%d %d %f\n",((aresta*)(g->aresta_atual->data))->inicio, ((aresta*)(g->aresta_atual->data))->fim, ((aresta*)(g->aresta_atual->data))->peso);
-    g_proxima_aresta(g,&origem, &destino, &peso);
-    printf("%d %d %f\n",((aresta*)(g->aresta_atual->data))->inicio, ((aresta*)(g->aresta_atual->data))->fim, ((aresta*)(g->aresta_atual->data))->peso);
-    
-}

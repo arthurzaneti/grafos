@@ -4,5 +4,5 @@
 #include <stdio.h>
 
 int main(){
-    grafo_testa2();
+    grafo_testa();
 }

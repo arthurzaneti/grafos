@@ -74,15 +74,12 @@ void lista_insere(lista*l, no* elem, int pos){
     }
     else{
         if (pos==0) {
-            printf("Inserindo no inicio\n");
             lista_insere_inicio_aux(l, elem);
         }
         else if (pos==l->num_elementos) {
-            printf("Inserindo no final\n");
             lista_insere_fim_aux(l, elem);
         }
         else{
-            printf("Inserção normal\n");
             no *no_atual = l->primeiro;
             int contador = 0;
             while(contador < pos-1){
