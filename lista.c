@@ -23,6 +23,8 @@ no* no_cria(void*data){
         return NULL;
     }
     n->data = data;
+    n->prox = NULL;
+    n->ant = NULL;
     return n;
 }
 
@@ -71,15 +73,23 @@ void lista_insere(lista*l, no* elem, int pos){
         return;
     }
     else{
-        if (pos==0) lista_insere_inicio_aux(l, elem);
-        else if (pos==l->num_elementos) lista_insere_fim_aux(l, elem);
+        if (pos==0) {
+            printf("Inserindo no inicio\n");
+            lista_insere_inicio_aux(l, elem);
+        }
+        else if (pos==l->num_elementos) {
+            printf("Inserindo no final\n");
+            lista_insere_fim_aux(l, elem);
+        }
         else{
+            printf("Inserção normal\n");
             no *no_atual = l->primeiro;
             int contador = 0;
-            while(contador < pos){
+            while(contador < pos-1){
                 no_atual = no_atual->prox;
                 contador++;
             }
+            assert(no_atual->prox !=NULL);
             elem->prox = no_atual->prox;
             elem->ant = no_atual;
             no_atual->prox = elem;
@@ -89,7 +99,6 @@ void lista_insere(lista*l, no* elem, int pos){
     }
     l->num_elementos++;
 }
-
 void* lista_remove_inicio_aux(lista*l){
     no* no_remover = l->primeiro;
     no_remover->prox->ant = NULL;
@@ -117,7 +126,7 @@ void* lista_remove(lista *l, int pos){
     if (pos==l->num_elementos) return lista_remove_fim_aux(l);
     int contador = 0;
     no* no_atual = l->primeiro;
-    while (contador<=pos){
+    while (contador<pos){
         no_atual = no_atual->prox;
         contador++;
     } 
@@ -164,31 +173,77 @@ void lista_destroi(lista*l){
     free(l);
 }
 
-void lista_testa(){
-
+void lista_testa() {
     lista* l = lista_cria();
-
+    
     int a = 10;
-    void *ptra = &a;
-    no *no_int =no_cria(ptra);
-    lista_insere(l, no_int,0);
+    void* ptra = &a;
+    no* no_int = no_cria(ptra);
+    lista_insere(l, no_int, 0);
+    assert(l->num_elementos == 1);
+    assert(l->primeiro == no_int);
+    assert(l->ultimo == no_int);
     
     char b = 'b';
-    void *ptrb = &b;
-    no *no_char =no_cria(ptrb);
-    lista_insere(l, no_char,l->num_elementos);
+    void* ptrb = &b;
+    no* no_char = no_cria(ptrb);
+    lista_insere(l, no_char, l->num_elementos);
+    assert(l->num_elementos == 2);
+    assert(l->primeiro == no_int);
+    assert(l->ultimo == no_char);
     
-    lista* c = lista_cria();
-    void *ptrc = c;
-    no *no_lista =no_cria(ptrc);
-    lista_insere(l, no_lista, -1);
+    float c = 3.14;
+    void* ptrc = &c;
+    no* no_float = no_cria(ptrc);
+    
+    lista_insere(l, no_float, 1);
+    assert(l->num_elementos == 3);
+    assert(l->primeiro == no_int);
+    assert(l->ultimo == no_char);
+    
 
-    assert(l->num_elementos ==3);
-    assert(no_int== l->primeiro);
-    assert(no_lista==l->ultimo);
+    int d = 20;
+    void* ptrd = &d;
+    no* no_negative = no_cria(ptrd);
+    lista_insere(l, no_negative, -1);
+    assert(l->num_elementos == 4);
+    assert(l->primeiro == no_int);
+    assert(l->ultimo == no_negative);
 
-    lista_remove(l, 0);
-    assert(l->primeiro == no_char);
-    assert(l->num_elementos==2);
+    int e = 30;
+    void* ptre = &e;
+    no* no_beyond = no_cria(ptre);
+    lista_insere(l, no_beyond, -1);
+    assert(l->num_elementos == 5);
+    assert(l->primeiro == no_int);
+    assert(l->ultimo == no_beyond);
+    void* removed_data = lista_remove(l, 0);
+    // ERRO NO PTRA, por algum motivo assert(removed_data == ptra) falha..
+    assert(removed_data == ptra);
+    assert(l->num_elementos == 4);
+    assert(l->primeiro == no_float);
+
+    removed_data = lista_remove(l, 2);
+    assert(removed_data == ptrc);
+    assert(l->num_elementos == 3);
+    assert(l->ultimo == no_beyond);
+
+    removed_data = lista_remove(l, l->num_elementos - 1);
+    assert(removed_data == ptre);
+    assert(l->num_elementos == 2);
+    assert(l->ultimo == no_char);
+
+    removed_data = lista_remove(l, -1);
+    assert(removed_data == ptrd);
+    assert(l->num_elementos == 1);
+    assert(l->primeiro == no_float);
+
+    removed_data = lista_remove(l, 10);
+    assert(removed_data == NULL);
+    assert(l->num_elementos == 1);
+    assert(l->ultimo == no_float);
+
     lista_destroi(l);
+
+    printf("Sucesso nos testes!\n");
 }
