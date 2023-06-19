@@ -4,5 +4,5 @@
 #include <stdio.h>
 
 int main(){
-    lista_testa();
+    grafo_testa2();
 }
