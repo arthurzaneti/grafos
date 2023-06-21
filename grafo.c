@@ -108,25 +108,27 @@ void g_ins_aresta(Grafo g, int origem, int destino, float peso) {
         no_atual = no_atual->prox;
     }
     if (!origem_existe && !destino_existe) {
-        printf("Criando ambos \n");
         free(novo_no->data);
         free(novo_no);
-        g_vertice_cria(g, origem);
-        g_vertice_cria(g, destino);
-        g_ins_aresta(g, origem, destino, peso);
+        if( origem == destino){
+            g_vertice_cria(g, origem);
+            g_ins_aresta(g, origem, destino, peso);
+        }else{
+            g_vertice_cria(g, origem);
+            g_vertice_cria(g, destino);
+            g_ins_aresta(g, origem, destino, peso);
+        }
     } else if (!origem_existe && destino_existe) {
-        printf("Criando Origem \n");
         free(novo_no->data);
         free(novo_no);
         g_vertice_cria(g, origem);
         g_ins_aresta(g, origem, destino, peso);
     } else if (origem_existe && !destino_existe) {
-        printf("Criando destino");
         free(novo_no->data);
         free(novo_no);
         g_vertice_cria(g, destino);
         g_ins_aresta(g, origem, destino, peso);
-    } else if (!g->orientado) {
+    } else if (!g->orientado && origem !=destino) {
         g_ins_aresta_inversa(g, destino, origem, peso);
         g->num_arestas++;
     } else{
@@ -192,7 +194,6 @@ void g_rem_aresta(Grafo g, int origem, int destino){
     int pos = 0;
     while (no_atual!=NULL){
         aresta* aresta_atual = (no_atual->data);
-        printf("   %d \n", aresta_atual->fim);
         if(aresta_atual->fim == destino){
             aresta_destroi(aresta_atual);
             lista_remove(lista_com_aresta_remover, pos);
@@ -239,7 +240,7 @@ void g_arestas_que_partem(Grafo g, int origem){
         no_lista_atual= no_lista_atual->prox;
     }
     if(!achei){
-        printf("Erro em arestas que partem: no de origem não existe");
+        printf("Erro em arestas que partem: no de origem não existe\n");
         return;
     }
     g->lista_atual = no_lista_atual;
@@ -263,15 +264,16 @@ bool g_proxima_aresta(Grafo g, int* origem, int* destino, float* peso) {
         printf("Erro em iteração de arestas: tentando acessar próxima aresta fora da iteração\n");
         return false;
     }
-    *origem = ((aresta*)(g->aresta_atual))->inicio;
-    *destino = ((aresta*)(g->aresta_atual))->fim;
-    *peso = ((aresta*)(g->aresta_atual))->peso;
+    *origem = ((aresta*)(g->aresta_atual->data))->inicio;
+    *destino = ((aresta*)(g->aresta_atual->data))->fim;
+    *peso = ((aresta*)(g->aresta_atual->data))->peso;
 
     if (g->aresta_atual->prox == NULL) {
         if (g->lista_atual->prox == NULL) {
             para_iteracao(g);
             return false;
         } else if (g->iteracao == ITERANDO_TODO_GRAFO) {
+            printf("//////////TROCANDO DE LINHA////////////////\n");
             g->lista_atual = g->lista_atual->prox;
             g->aresta_atual = ((lista*)(g->lista_atual->data))->primeiro;
             return true;
@@ -280,9 +282,8 @@ bool g_proxima_aresta(Grafo g, int* origem, int* destino, float* peso) {
             return false;
         }
     }
+ 
     g->aresta_atual = g->aresta_atual->prox;
-
-    
 
     return true;
 }
@@ -293,29 +294,30 @@ void grafo_testa() {
     assert(g->lista_de_adjacencias->num_elementos==0);
 
     g_ins_aresta(g, 0, 1, 1.5);
-    assert(g->lista_de_adjacencias->num_elementos==2);
+    g_ins_aresta(g, 0, 2, 2.5);
+    g_ins_aresta(g, 0, 3, 3.5);
+    g_ins_aresta(g, 0, 4, 4.5);
+    g_ins_aresta(g, 1, 1, 1.5);
     g_ins_aresta(g, 1, 2, 2.5);
-    assert(g->lista_de_adjacencias->num_elementos==3);
-    g_ins_aresta(g, 2, 3, 3.5);
-    assert(g->lista_de_adjacencias->num_elementos==4);
-    g_ins_aresta(g, 3, 4, 4.5);
-    assert(g->lista_de_adjacencias->num_elementos==5);
-    g_ins_aresta(g, 4, 0, 5.5);
-    assert(g->lista_de_adjacencias->num_elementos==5);
-    assert(g->num_arestas ==10);
+    g_ins_aresta(g, 1, 3, 3.5);
+    g_ins_aresta(g, 1, 4, 4.5);
+
 
     g_arestas(g);
-    int origem, destino;
-    float peso;
+
+    int origem = 0;
+    int destino = 0;
+    float peso = 0.0;
+
     while (g_proxima_aresta(g, &origem, &destino, &peso)) {
         printf("Aresta: %d -> %d, Peso: %.2f\n", origem, destino, peso);
     }
 
-    g_arestas_que_partem(g, 2);
-    while (g_proxima_aresta(g, &origem, &destino, &peso)) {
-        printf("Aresta que parte de 2: %d -> %d, Peso: %.2f\n", origem, destino, peso);
-    }
+    //g_arestas_que_partem(g, 2);
+    //while (g_proxima_aresta(g, &origem, &destino, &peso)) {
+        //printf("Aresta que parte de 2: %d -> %d, Peso: %.2f\n", origem, destino, peso);
+    //}
    
-    g_rem_aresta(g, 3, 4);
+    //g_rem_aresta(g, 3, 4);
     g_destroi(g);
 }

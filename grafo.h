@@ -34,6 +34,5 @@ void g_arestas_que_partem(Grafo self, int origem);
 bool g_proxima_aresta(Grafo g, int* origem, int* destino, float* peso);
 
 void grafo_testa();
-void grafo_testa2();
 
 #endif
