@@ -1,22 +1,23 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic
+BIN_DIR = bin
 
-all: programa
+all: $(BIN_DIR)/programa
 
-programa: lista.o grafo.o aresta.o main.o
-	$(CC) $(CFLAGS) -o programa lista.o grafo.o aresta.o main.o
+$(BIN_DIR)/programa: $(BIN_DIR)/lista.o $(BIN_DIR)/grafo.o $(BIN_DIR)/aresta.o $(BIN_DIR)/main.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-lista.o: lista.c lista.h
-	$(CC) $(CFLAGS) -c lista.c
+$(BIN_DIR)/lista.o: lista.c lista.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-grafo.o: grafo.c grafo.h lista.h
-	$(CC) $(CFLAGS) -c grafo.c
+$(BIN_DIR)/grafo.o: grafo.c grafo.h lista.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-aresta.o: aresta.c aresta.h
-	$(CC) $(CFLAGS) -c aresta.c
+$(BIN_DIR)/aresta.o: aresta.c aresta.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-main.o: main.c lista.h grafo.h aresta.h
-	$(CC) $(CFLAGS) -c main.c
+$(BIN_DIR)/main.o: main.c lista.h grafo.h aresta.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f programa *.o
+	rm -f $(BIN_DIR)/*.o $(BIN_DIR)/programa
